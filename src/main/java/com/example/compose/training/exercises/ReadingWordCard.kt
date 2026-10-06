@@ -1,0 +1,77 @@
+package com.example.compose.training.exercises
+
+import androidx.compose.foundation.layout.Column
+import androidx.compose.foundation.layout.Spacer
+import androidx.compose.foundation.layout.fillMaxWidth
+import androidx.compose.foundation.layout.height
+import androidx.compose.foundation.text.input.TextFieldLineLimits
+import androidx.compose.foundation.text.input.rememberTextFieldState
+import androidx.compose.material3.Text
+import androidx.compose.material3.TextField
+import androidx.compose.material3.TextFieldColors
+import androidx.compose.material3.TextFieldDefaults
+import androidx.compose.runtime.Composable
+import androidx.compose.ui.Modifier
+import androidx.compose.ui.graphics.Color
+import androidx.compose.ui.res.colorResource
+import androidx.compose.ui.text.TextStyle
+import androidx.compose.ui.text.font.FontWeight
+import androidx.compose.ui.text.style.TextAlign
+import androidx.compose.ui.tooling.preview.Preview
+import androidx.compose.ui.unit.dp
+import androidx.compose.ui.unit.sp
+import com.example.compose.R
+import com.example.compose.training.components.BtnComponent
+import com.example.compose.training.components.CardExercise
+import com.example.compose.ui.theme.ComposeTheme
+import com.example.compose.ui.theme.NotoSans
+import com.example.compose.ui.theme.RobotoMono
+
+
+//tipo 7: Escribe la pronunciocion de la palabra
+@Composable
+fun ReadingWordCard(word: String,modifier: Modifier= Modifier) {
+    val answerState = rememberTextFieldState("")
+    Column(modifier = modifier.fillMaxWidth()) {
+        CardExercise(word, "¿Comó se lee?", NotoSans,50)
+
+        Spacer(modifier = Modifier.height(30.dp))
+
+        TextField(
+            state = answerState,
+            lineLimits = TextFieldLineLimits.SingleLine,
+            textStyle = TextStyle(color = Color.White,
+                fontWeight = FontWeight.SemiBold,
+                fontSize = 18.sp,
+                fontFamily = RobotoMono,
+                textAlign = TextAlign.Center
+            ),
+            placeholder = {Text("Escribe tu respuesta",
+                fontFamily = RobotoMono,
+                fontSize = 18.sp,
+                modifier = Modifier.fillMaxWidth(), // Permite que el Text ocupe el ancho del TextField
+                textAlign = TextAlign.Center)},
+            modifier = modifier.fillMaxWidth(),
+            colors = TextFieldDefaults.colors(
+                focusedContainerColor = colorResource(R.color.card_principal),  // Color cuando está seleccionado
+                unfocusedContainerColor = colorResource(R.color.card_principal),     // Color cuando NO está seleccionado
+
+                // Opcional: Si quieres ocultar la línea inferior por defecto del TextField
+                focusedIndicatorColor = Color.Transparent,
+                unfocusedIndicatorColor = Color.Transparent
+            )
+        )
+
+        Spacer(modifier = Modifier.height(30.dp))
+
+        BtnComponent(onClick = {}, "Comprobar")
+    }
+}
+
+@Preview
+@Composable
+fun PreviewReadingWordCard(){
+    ComposeTheme() {
+        ReadingWordCard("海岸")
+    }
+}

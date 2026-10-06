@@ -29,6 +29,8 @@ import androidx.compose.ui.tooling.preview.Preview
 import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import com.example.compose.R
+import com.example.compose.home.components.HeaderGlobal
+import com.example.compose.roundedCornerShapeValue
 import com.example.compose.ui.theme.ComposeTheme
 import com.example.compose.ui.theme.Roboto
 
@@ -38,7 +40,8 @@ fun Main(modifier: Modifier = Modifier){
         .fillMaxHeight()
         .background(Color.Black)
         .padding(24.dp)) {
-        Header()
+        HeaderGlobal( "Miercoles, 12 de agosto", "Buenos dias", "")
+
         GridKvis()
         EntrenarBtn(onClick = { Log.d("Filled button", "Filled button clicked.") })
     }
@@ -46,8 +49,10 @@ fun Main(modifier: Modifier = Modifier){
 
 @Composable
 fun Header(modifier: Modifier = Modifier){
-    Column(modifier= modifier.size(width = 400.dp, height = 100.dp).
-    padding(top = 30.dp)) {
+    Column(
+        modifier= modifier.size(width = 400.dp, height = 100.dp)
+            .padding(top = 30.dp)
+    ) {
         Text(
             text = "Miercoles, 12 de agosto",
             fontSize = 15.sp,
@@ -136,9 +141,9 @@ fun GridKvis(modifier: Modifier = Modifier){
 
 @Composable
 fun EntrenarBtn(onClick: () -> Unit, modifier: Modifier = Modifier){
-    Box(modifier.size(width = 400.dp, height = 100.dp)){
-        Button(onClick = { onClick() }, modifier.fillMaxWidth().height(66.dp),
-            shape = RoundedCornerShape(15.dp),
+    Box(modifier.size(width = 400.dp, height = 56.dp)){
+        Button(onClick = { onClick() }, modifier.fillMaxWidth().height(48.dp),
+            shape = RoundedCornerShape(roundedCornerShapeValue),
             colors= ButtonDefaults.buttonColors(
                 containerColor = Color.White,
                 contentColor = Color.Black

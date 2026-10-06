@@ -2,6 +2,8 @@ plugins {
     alias(libs.plugins.android.application)
     alias(libs.plugins.kotlin.android)
     alias(libs.plugins.kotlin.compose)
+    alias(libs.plugins.ksp)
+    alias(libs.plugins.hilt.android.gradle)
 }
 
 android {
@@ -10,7 +12,7 @@ android {
 
     defaultConfig {
         applicationId = "com.example.compose"
-        minSdk = 24
+        minSdk = 26
         targetSdk = 37
         versionCode = 1
         versionName = "1.0"
@@ -33,8 +35,10 @@ android {
 dependencies {
 
     implementation(libs.androidx.core.ktx)
+    implementation(libs.androidx.espresso.core)
     implementation(libs.androidx.lifecycle.runtime.ktx)
     implementation(libs.androidx.activity.compose)
+    implementation("org.jetbrains.kotlinx:kotlinx-coroutines-android:1.3.9")
 
     // Compose BOM
     implementation(platform(libs.androidx.compose.bom))
@@ -66,6 +70,16 @@ dependencies {
     implementation(libs.kotlinx.serialization.json)
 
     implementation(libs.androidx.compose.material.icons.extended)
+
+    // Room
+    implementation(libs.androidx.room.runtime)
+    implementation(libs.androidx.room.ktx)
+    ksp(libs.androidx.room.compiler)
+
+    // Hilt
+    implementation(libs.dagger.hilt.android)
+    ksp(libs.dagger.hilt.android.compiler)
+    implementation(libs.androidx.hilt.navigation.compose)
 
     // Tests
     testImplementation(libs.junit)

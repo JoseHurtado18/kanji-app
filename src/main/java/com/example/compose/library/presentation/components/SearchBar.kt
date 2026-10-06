@@ -1,9 +1,8 @@
-package com.example.compose.library
+package com.example.compose.library.presentation.components
 
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Box
 import androidx.compose.foundation.layout.Column
-import androidx.compose.foundation.layout.Row
 import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.padding
@@ -55,20 +54,34 @@ fun SimpleSearchBar(
 ) {
     var expanded by rememberSaveable { mutableStateOf(false) }
 
-    // Box contenedor sin límites para permitir la expansión total
+    // Definimos la paleta de colores para el campo de entrada
+    val customInputFieldColors = TextFieldDefaults.colors(
+        focusedTextColor = Color.White,
+        unfocusedTextColor = Color.LightGray,
+        focusedLeadingIconColor = Color(0xFFFFB703),
+        unfocusedLeadingIconColor = Color(0xFFFFB703), // Dorado también en reposo
+        focusedPlaceholderColor = Color.Gray,
+        unfocusedPlaceholderColor = Color.LightGray,
+        focusedContainerColor = Color.Transparent,
+        unfocusedContainerColor = Color.Transparent
+    )
+
     Box(
         modifier = modifier
             .fillMaxSize()
             .semantics { isTraversalGroup = true }
     ) {
         SearchBar(
-
             modifier = Modifier
                 .align(Alignment.TopCenter)
-                // Si está expandido se pega arriba (0.dp), si no, mantiene su posición (ej. 90.dp)
                 .padding(top = if (expanded) 0.dp else 90.dp)
                 .padding(horizontal = if (expanded) 0.dp else 16.dp)
                 .semantics { traversalIndex = 0f },
+            shape = RoundedCornerShape(16.dp), // Cambia a tus esquinas preferidas
+            colors = SearchBarDefaults.colors(
+                containerColor = colorResource(R.color.grisdestacado),
+                dividerColor = colorResource(R.color.kvinegro)
+            ),
             inputField = {
                 SearchBarDefaults.InputField(
                     query = textFieldState.text.toString(),
@@ -79,16 +92,14 @@ fun SimpleSearchBar(
                     },
                     expanded = expanded,
                     onExpandedChange = { expanded = it },
-                    placeholder = { Text("Buscar kanjis...",
-                        fontSize = 16.sp) },
+                    placeholder = {
+                        Text("Buscar kanjis...", fontSize = 16.sp)
+                    },
                     leadingIcon = {
-                        if (expanded) {
-                            IconButton(onClick = { expanded = false }) {
-                                Icon(Icons.Default.ArrowBack, contentDescription = "Volver")
-                            }
-                        } else {
-                            Icon(Icons.Default.Search, contentDescription = "Buscar")
-                        }
+                        Icon(
+                            imageVector = if (expanded) Icons.Default.ArrowBack else Icons.Default.Search,
+                            contentDescription = "Buscar"
+                        )
                     },
                     trailingIcon = {
                         if (expanded && textFieldState.text.isNotEmpty()) {
@@ -96,33 +107,19 @@ fun SimpleSearchBar(
                                 Icon(Icons.Default.Close, contentDescription = "Limpiar")
                             }
                         }
-                    }
+                    },
+                    // 🔑 AQUÍ ES DONDE SE APLICAN LOS COLORES DEL INPUT:
+                    colors = customInputFieldColors
                 )
             },
             expanded = expanded,
             onExpandedChange = { expanded = it },
-            shape = RoundedCornerShape(8.dp),
-            colors = SearchBarDefaults.colors(
-                containerColor = colorResource(R.color.kvinegro),
-                dividerColor = colorResource(R.color.kvinegro),
-                inputFieldColors = TextFieldDefaults.colors(
-                    focusedTextColor = Color.White,
-                    unfocusedTextColor = Color.LightGray,
-                    focusedLeadingIconColor = Color(0xFFFFB703), // Icono de lupa amarillo/dorado
-                    unfocusedLeadingIconColor = Color.Gray,
-                    focusedPlaceholderColor = Color.Gray,
-                    unfocusedPlaceholderColor = Color.LightGray,
-                    focusedContainerColor = Color.Transparent,
-                    unfocusedContainerColor = Color.Transparent
-                )
-            ),
         ) {
-            // Lista desplegable cuando está en pantalla completa
             Column(Modifier.verticalScroll(rememberScrollState())) {
                 searchResults.forEach { result ->
                     ListItem(
-                        headlineContent = { Text(result) },
-                        leadingContent = { Icon(Icons.Default.Search, contentDescription = null) },
+                        headlineContent = { Text(result, color = Color.White) },
+                        leadingContent = { Icon(Icons.Default.Search, contentDescription = null, tint = Color.Gray) },
                         modifier = Modifier
                             .clickable {
                                 textFieldState.edit { replace(0, length, result) }
@@ -162,6 +159,9 @@ fun SimpleSearchBarExample(modifier: Modifier = Modifier) {
         modifier = modifier
     )
 }
+
+
+
 
 @Preview
 @Composable

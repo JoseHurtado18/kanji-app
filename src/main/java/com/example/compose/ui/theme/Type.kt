@@ -18,11 +18,23 @@ val Roboto = FontFamily(
     Font(R.font.roboto_semibold, FontWeight.SemiBold)
 )
 
+val RobotoMono = FontFamily(
+    Font(R.font.robotomono_regular, FontWeight.Normal),
+    Font(R.font.robotomono_medium, FontWeight.Medium),
+    Font(R.font.robotomono_bold, FontWeight.Bold),
+    Font(R.font.robotomono_semibold, FontWeight.SemiBold)
+)
+
 val NotoSans = FontFamily(
     Font(R.font.notosansjp_regular, FontWeight.Normal),
     Font(R.font.notosansjp_medium, FontWeight.Medium),
     Font(R.font.notosansjp_bold, FontWeight.Bold),
     Font(R.font.notosansjp_semibold, FontWeight.SemiBold)
+)
+
+val CourierPrime = FontFamily(
+    Font(R.font.courierprime_regular, FontWeight.Normal),
+    Font(R.font.courierprime_bold, FontWeight.Bold)
 )
 
 val AppTypography = Typography(

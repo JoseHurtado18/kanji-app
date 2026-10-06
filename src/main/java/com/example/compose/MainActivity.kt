@@ -9,6 +9,7 @@ import android.widget.GridView
 import androidx.activity.ComponentActivity
 import androidx.activity.compose.setContent
 import androidx.activity.enableEdgeToEdge
+import dagger.hilt.android.AndroidEntryPoint
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
 import androidx.compose.foundation.layout.Arrangement
@@ -53,6 +54,7 @@ import com.example.compose.R.color
 import com.example.compose.ui.theme.ComposeTheme
 import com.example.compose.ui.theme.Roboto
 
+@AndroidEntryPoint
 class MainActivity : ComponentActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
@@ -69,3 +71,4 @@ class MainActivity : ComponentActivity() {
 
 
 
+val roundedCornerShapeValue = 20.dp
