@@ -6,6 +6,7 @@ import com.example.compose.kanji.domain.usecase.kanji.DeleteExampleWordUseCase
 import com.example.compose.kanji.domain.usecase.kanji.DeleteKanjiUseCase
 import com.example.compose.kanji.domain.usecase.kanji.GetAllKanjisUseCase
 import com.example.compose.kanji.domain.usecase.kanji.GetKanjiUseCase
+import com.example.compose.kanji.domain.usecase.kanji.GetStrokesKanjiUseCase
 import com.example.compose.kanji.domain.usecase.kanji.UpdateKanjiUseCase
 
 data class KanjiUseCases(
@@ -22,5 +23,7 @@ data class KanjiUseCases(
 
     val addExampleWord: AddExampleWordUseCase,
 
-    val deleteExampleWord: DeleteExampleWordUseCase
+    val deleteExampleWord: DeleteExampleWordUseCase,
+
+    val getStrokesKanji: GetStrokesKanjiUseCase
 )

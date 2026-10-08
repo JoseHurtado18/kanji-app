@@ -7,7 +7,6 @@ import com.example.compose.kanji.domain.model.Kanji
 import com.example.compose.kanji.domain.usecase.KanjiUseCases
 import com.example.compose.kanji.presentation.add.FormKanjiUiMessage
 import com.example.compose.kanji.presentation.add.FormKanjiUiState
-import com.example.compose.kanji.presentation.detail.KanjiUiMessage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import kotlinx.coroutines.channels.Channel
 import kotlinx.coroutines.flow.MutableStateFlow

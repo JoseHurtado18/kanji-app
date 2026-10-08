@@ -17,6 +17,10 @@ import androidx.compose.material3.ButtonDefaults
 import androidx.compose.material3.OutlinedButton
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.getValue
+import androidx.compose.runtime.mutableIntStateOf
+import androidx.compose.runtime.remember
+import androidx.compose.runtime.setValue
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -29,9 +33,12 @@ import com.example.compose.R
 import com.example.compose.roundedCornerShapeValue
 
 @Composable
-fun CardEscritura(modifier: Modifier = Modifier) {
+fun CardEscritura(strokes: List<String>, modifier: Modifier = Modifier) {
+    // Cada click en "Reproducir" cambia la clave y reinicia la animación
+    var replayKey by remember { mutableIntStateOf(0) }
+
     Column(
-        modifier = Modifier
+        modifier = modifier
             .size(width = 360.dp, height = 360.dp)
             .padding(10.dp)
             .background(
@@ -39,10 +46,9 @@ fun CardEscritura(modifier: Modifier = Modifier) {
                 shape = RoundedCornerShape(roundedCornerShapeValue)
             )
             .padding(15.dp)
-
     ) {
         Row(
-            modifier = Modifier.fillMaxWidth(), // <-- ¡Esta es la solución!
+            modifier = Modifier.fillMaxWidth(),
             verticalAlignment = Alignment.CenterVertically,
             horizontalArrangement = Arrangement.SpaceBetween
         ) {
@@ -53,20 +59,29 @@ fun CardEscritura(modifier: Modifier = Modifier) {
                 fontWeight = FontWeight.SemiBold
             )
 
-            ReproducirBtn(onClick = {})
+            ReproducirBtn(onClick = { replayKey++ })
         }
+
+        AnimatedKanjiCanvas(
+            strokePaths = strokes,
+            replayKey = replayKey,
+            strokeColor = Color.White,
+            modifier = Modifier
+                .weight(1f)
+                .fillMaxWidth()
+                .padding(top = 12.dp)
+        )
     }
 }
 
 @Composable
 fun ReproducirBtn(onClick: () -> Unit, modifier: Modifier = Modifier) {
     OutlinedButton(
-        onClick = onClick, // Asegúrate de pasar la variable onClick aquí
+        onClick = onClick,
         modifier = modifier
             .width(135.dp)
             .height(35.dp),
         shape = RoundedCornerShape(10.dp),
-        // Agregamos el borde grisáceo que se ve en la imagen
         border = BorderStroke(1.dp, Color.DarkGray),
         colors = ButtonDefaults.outlinedButtonColors(
             containerColor = Color.Black,
@@ -74,19 +89,14 @@ fun ReproducirBtn(onClick: () -> Unit, modifier: Modifier = Modifier) {
         ),
         contentPadding = PaddingValues(start = 8.dp, end = 12.dp)
     ) {
-        // Los elementos se centrarán automáticamente
         Image(
             painter = painterResource(R.drawable.ic_play),
             contentDescription = "play boton"
         )
 
-        // Este Spacer crea el pequeño espacio entre el icono y el texto
-        //Spacer(modifier = Modifier.width(6.dp))
-
         Text(
             text = "Reproducir",
-            fontSize = 14.sp // Reducimos un poco el texto para que encaje perfecto
-
+            fontSize = 14.sp
         )
     }
 }

@@ -17,7 +17,6 @@ import androidx.navigation.NavType
 import androidx.navigation.navArgument
 import androidx.compose.runtime.collectAsState
 import com.example.compose.kanji.presentation.detail.KanjiViewModel
-import com.example.compose.kanji.presentation.detail.KanjiEvent
 
 sealed class KanjiRoute(val route: String) {
     object Library : KanjiRoute("kanji_library")
@@ -79,7 +78,7 @@ fun KanjiFeature(modifier: Modifier = Modifier,
             val kanjiId = entry.arguments?.getInt("kanji_id") ?: 0
 
             LaunchedEffect(kanjiId) {
-                viewModel.onEvent(KanjiEvent.LoadKanjiById(kanjiId))
+                viewModel.loadKanjiById(kanjiId)
             }
 
             uiState.selectedKanji?.let { kanji ->
@@ -90,6 +89,7 @@ fun KanjiFeature(modifier: Modifier = Modifier,
                         )
                     },
                     kanji = kanji,
+                    viewModel = hiltViewModel(),
                     onBack = { kanjiNavController.popBackStack() }
                 )
             }

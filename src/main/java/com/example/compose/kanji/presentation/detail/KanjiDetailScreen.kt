@@ -20,6 +20,8 @@ import androidx.compose.material3.IconButton
 import androidx.compose.material3.Scaffold
 import androidx.compose.material3.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
+import androidx.compose.runtime.collectAsState
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -53,8 +55,26 @@ fun MainKanjiDetail(
     onEditClic : (Kanji) -> Unit = {},
     modifier: Modifier = Modifier,
     kanji: Kanji,
+    viewModel: KanjiViewModel,
     onBack: () -> Unit
 ) {
+
+    LaunchedEffect(Unit) {
+        viewModel.loadKanjiById(kanji.id)
+        viewModel.uiMessage.collect { message ->
+            when(message){
+                is KanjiDetailUiMessage.Info -> {}
+                is KanjiDetailUiMessage.KanjiUpdated -> {}
+                is KanjiDetailUiMessage.KanjiAdded -> {}
+                is KanjiDetailUiMessage.KanjiDeleted -> {}
+                is KanjiDetailUiMessage.WordAdded -> {}
+                is KanjiDetailUiMessage.WordDeleted -> {}
+            }
+        }
+    }
+
+    val state by viewModel.uiState.collectAsState()
+
     Scaffold(
         topBar = {
             HeaderKanji( kanji.jlptLevel.toString(),onBack = onBack)
@@ -86,7 +106,7 @@ fun MainKanjiDetail(
             CardMeans(kanji.meaningEs)
             GridKvisKanjiView(kanji.onYomi, kanji.kunYomi, kanji.radical,
                 kanji.strokeCount)
-            CardEscritura()
+            CardEscritura(state.strokePaths)
             CardEjemplos(words = listOf(
                 WordItem("学校", "escuela"),
                 WordItem("学", "estudio"),
