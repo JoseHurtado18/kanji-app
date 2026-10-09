@@ -35,6 +35,10 @@ class KanjiRepositoryImpl @Inject constructor(
             }
     }
 
+    override fun observeKanjiCount(): Flow<Int> {
+        return kanjiDao.observeKanjiCount()
+    }
+
     override suspend fun updateKanji(kanji: Kanji) { kanjiDao.updateKanji(
             kanji.toEntity()
         )

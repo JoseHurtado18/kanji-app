@@ -10,7 +10,7 @@ import androidx.room.Upsert
 import com.example.compose.kanji.data.entity.KanjiEntity
 import com.example.compose.kanji.data.entity.KanjiWithExampleWords
 import kotlinx.coroutines.flow.Flow
-
+import kotlinx.coroutines.flow.map
 @Dao
 interface KanjiDAO {
 
@@ -19,6 +19,14 @@ interface KanjiDAO {
         kanji: KanjiEntity
     ): Long
 
+
+    /*
+    * Una precisión importante: si en tu aplicación un kanji puede existir en la base de datos sin
+    * considerarse todavía «aprendido», el contador no debería ser simplemente COUNT(*).
+    * En ese caso, necesitarás contar únicamente los registros que cumplan tu criterio de aprendizaje.
+    * */
+    @Query("SELECT COUNT(*) FROM kanji_table")
+    fun observeKanjiCount(): Flow<Int>
 
     @Transaction
     @Query("""

@@ -15,6 +15,7 @@ import com.example.compose.kanji.domain.usecase.kanji.DeleteKanjiUseCase
 import com.example.compose.kanji.domain.usecase.kanji.GetAllKanjisUseCase
 import com.example.compose.kanji.domain.usecase.kanji.GetKanjiUseCase
 import com.example.compose.kanji.domain.usecase.kanji.GetStrokesKanjiUseCase
+import com.example.compose.kanji.domain.usecase.kanji.ObserveKanjiCountUseCase
 import com.example.compose.kanji.domain.usecase.kanji.UpdateKanjiUseCase
 import dagger.Module
 import dagger.Provides
@@ -58,7 +59,8 @@ object KanjiModule {
             deleteKanji = DeleteKanjiUseCase(repository),
             addExampleWord = AddExampleWordUseCase(repository),
             deleteExampleWord = DeleteExampleWordUseCase(repository),
-            getStrokesKanji = GetStrokesKanjiUseCase(strokesrepository)
+            getStrokesKanji = GetStrokesKanjiUseCase(strokesrepository),
+            observeKanjiCount = ObserveKanjiCountUseCase(repository)
         )
     }
 }

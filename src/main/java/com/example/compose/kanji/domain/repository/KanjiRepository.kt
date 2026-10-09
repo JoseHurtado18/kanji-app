@@ -12,6 +12,8 @@ interface KanjiRepository {
 
     fun getAllKanjis(): Flow<List<Kanji>>
 
+    fun observeKanjiCount(): Flow<Int>
+
     suspend fun updateKanji(kanji: Kanji)
 
     suspend fun deleteKanji(kanji: Kanji)

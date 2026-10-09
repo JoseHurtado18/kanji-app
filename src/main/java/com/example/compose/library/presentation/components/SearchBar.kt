@@ -96,10 +96,21 @@ fun SimpleSearchBar(
                         Text("Buscar kanjis...", fontSize = 16.sp)
                     },
                     leadingIcon = {
-                        Icon(
-                            imageVector = if (expanded) Icons.Default.ArrowBack else Icons.Default.Search,
-                            contentDescription = "Buscar"
-                        )
+                        if (expanded) {
+                            // Cuando está expandido, usamos un IconButton para detectar el clic
+                            IconButton(onClick = { expanded = false }) {
+                                Icon(
+                                    imageVector = Icons.Default.ArrowBack,
+                                    contentDescription = "Volver"
+                                )
+                            }
+                        } else {
+                            // Cuando no está expandido, mostramos solo el icono de lupa normal
+                            Icon(
+                                imageVector = Icons.Default.Search,
+                                contentDescription = "Buscar"
+                            )
+                        }
                     },
                     trailingIcon = {
                         if (expanded && textFieldState.text.isNotEmpty()) {

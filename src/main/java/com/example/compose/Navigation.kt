@@ -27,6 +27,7 @@ import androidx.compose.runtime.setValue
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.res.colorResource
 import androidx.compose.ui.tooling.preview.Preview
+import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.compose.ui.theme.ComposeTheme
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
@@ -61,7 +62,9 @@ fun AppNavHost(
         Destination.entries.forEach { destination ->
             composable(destination.route) {
                 when (destination) {
-                    Destination.Home -> Main()
+                    Destination.Home -> Main(
+                        viewModel = hiltViewModel()
+                    )
                     Destination.Library -> KanjiFeature(
                         onDetailVisibleChange = onKanjiDetailVisibleChange,
                         onAddKanjiVisibleChange = onAddKanjiVisibleChange,
