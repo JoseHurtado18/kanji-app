@@ -1,22 +1,36 @@
 package com.example.compose.core.di
 
 import android.content.Context
-import com.example.compose.kanji.data.dao.ExampleWordDAO
-import com.example.compose.kanji.data.dao.KanjiDAO
-import com.example.compose.kanji.data.repository.KanjiRepositoryImpl
-import com.example.compose.kanji.data.repository.KanjiStrokeRepositoryImpl
-import com.example.compose.kanji.domain.repository.KanjiRepository
-import com.example.compose.kanji.domain.repository.KanjiStrokeRepository
-import com.example.compose.kanji.domain.usecase.KanjiUseCases
-import com.example.compose.kanji.domain.usecase.kanji.AddExampleWordUseCase
-import com.example.compose.kanji.domain.usecase.kanji.AddKanjiUseCase
-import com.example.compose.kanji.domain.usecase.kanji.DeleteExampleWordUseCase
-import com.example.compose.kanji.domain.usecase.kanji.DeleteKanjiUseCase
-import com.example.compose.kanji.domain.usecase.kanji.GetAllKanjisUseCase
-import com.example.compose.kanji.domain.usecase.kanji.GetKanjiUseCase
-import com.example.compose.kanji.domain.usecase.kanji.GetStrokesKanjiUseCase
-import com.example.compose.kanji.domain.usecase.kanji.ObserveKanjiCountUseCase
-import com.example.compose.kanji.domain.usecase.kanji.UpdateKanjiUseCase
+import com.example.compose.data.dao.ExampleWordDAO
+import com.example.compose.data.dao.KanjiDAO
+import com.example.compose.data.dao.WordDAO
+import com.example.compose.data.dao.WordLearningStateDao
+import com.example.compose.data.repository.DictionaryRepositoryImpl
+import com.example.compose.data.repository.KanjiRepositoryImpl
+import com.example.compose.data.repository.KanjiStrokeRepositoryImpl
+import com.example.compose.data.repository.WordRepositoryImpl
+import com.example.compose.domain.repository.DictionaryRepository
+import com.example.compose.domain.repository.KanjiRepository
+import com.example.compose.domain.repository.KanjiStrokeRepository
+import com.example.compose.domain.repository.WordRepository
+import com.example.compose.domain.usecase.KanjiUseCases
+import com.example.compose.domain.usecase.WordUseCases
+import com.example.compose.domain.usecase.kanji.AddExampleWordUseCase
+import com.example.compose.domain.usecase.kanji.AddKanjiUseCase
+import com.example.compose.domain.usecase.kanji.DeleteExampleWordUseCase
+import com.example.compose.domain.usecase.kanji.DeleteKanjiUseCase
+import com.example.compose.domain.usecase.kanji.GetAllKanjisUseCase
+import com.example.compose.domain.usecase.kanji.GetKanjiUseCase
+import com.example.compose.domain.usecase.kanji.GetStrokesKanjiUseCase
+import com.example.compose.domain.usecase.kanji.ObserveKanjiCountUseCase
+import com.example.compose.domain.usecase.kanji.ObserveWordsForKanjiUseCase
+import com.example.compose.domain.usecase.kanji.UpdateKanjiUseCase
+import com.example.compose.domain.usecase.word.AddWordUseCase
+import com.example.compose.domain.usecase.word.GetAllKanjisForWordUseCase
+import com.example.compose.domain.usecase.word.GetAllWordsUseCase
+import com.example.compose.domain.usecase.word.GetWordUseCase
+import com.example.compose.domain.usecase.word.UpdateWordUseCase
+import dagger.Binds
 import dagger.Module
 import dagger.Provides
 import dagger.hilt.InstallIn
@@ -28,6 +42,14 @@ import javax.inject.Singleton
 @InstallIn(SingletonComponent::class)
 object KanjiModule {
 
+    @Module
+    @InstallIn(SingletonComponent::class)
+    abstract class RepositoryModule {
+        @Binds
+        abstract fun bindDictionaryRepository(
+            impl: DictionaryRepositoryImpl
+        ): DictionaryRepository
+    }
     @Provides
     @Singleton
     fun provideKanjiRepository(
@@ -35,6 +57,15 @@ object KanjiModule {
         exampleWordDao: ExampleWordDAO
     ): KanjiRepository {
         return KanjiRepositoryImpl(kanjiDao, exampleWordDao)
+    }
+
+    @Provides
+    @Singleton
+    fun provideWordRepository(
+        wordDao: WordDAO,
+        learningStateDao: WordLearningStateDao
+    ):  WordRepository{
+        return WordRepositoryImpl(wordDao, learningStateDao)
     }
 
     @Provides
@@ -60,7 +91,22 @@ object KanjiModule {
             addExampleWord = AddExampleWordUseCase(repository),
             deleteExampleWord = DeleteExampleWordUseCase(repository),
             getStrokesKanji = GetStrokesKanjiUseCase(strokesrepository),
-            observeKanjiCount = ObserveKanjiCountUseCase(repository)
+            observeKanjiCount = ObserveKanjiCountUseCase(repository),
+            observeWordsForKanji = ObserveWordsForKanjiUseCase(repository)
+        )
+    }
+
+    @Provides
+    @Singleton
+    fun provideWordUseCases(
+        repository: WordRepository
+    ): WordUseCases {
+        return WordUseCases(
+            addWordUseCase = AddWordUseCase(repository),
+            getAllWordsUseCase = GetAllWordsUseCase(repository),
+            getWordUseCase = GetWordUseCase(repository),
+            getAllKanjisForWordUseCase = GetAllKanjisForWordUseCase(repository),
+            updateWordUseCase = UpdateWordUseCase(repository)
         )
     }
 }

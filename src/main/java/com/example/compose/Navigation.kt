@@ -19,7 +19,7 @@ import androidx.compose.ui.graphics.vector.ImageVector
 import androidx.navigation.NavHostController
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
-import com.example.compose.home.Main
+import com.example.compose.presentation.home.Main
 import androidx.compose.runtime.getValue
 import androidx.compose.runtime.mutableStateOf
 import androidx.compose.runtime.remember
@@ -31,8 +31,8 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.compose.ui.theme.ComposeTheme
 import androidx.navigation.compose.currentBackStackEntryAsState
 import androidx.navigation.compose.rememberNavController
-import com.example.compose.library.KanjiFeature
-import com.example.compose.stats.StatsScreen
+import com.example.compose.presentation.KanjiFeature
+import com.example.compose.presentation.stats.StatsScreen
 
 enum class Destination(
     val route: String,
@@ -52,6 +52,9 @@ fun AppNavHost(
     onKanjiDetailVisibleChange: (Boolean) -> Unit,
     onAddKanjiVisibleChange: (Boolean) -> Unit,
     onEditKanjiVisibleChange: (Boolean) -> Unit,
+    onDetailWordVisibleChange: (Boolean) -> Unit,
+    onAddWordVisibleChange: (Boolean) -> Unit,
+    onEditWordVisibleChange: (Boolean) -> Unit,
     modifier: Modifier = Modifier
 ){
     NavHost(
@@ -68,7 +71,10 @@ fun AppNavHost(
                     Destination.Library -> KanjiFeature(
                         onDetailVisibleChange = onKanjiDetailVisibleChange,
                         onAddKanjiVisibleChange = onAddKanjiVisibleChange,
-                        onEditKanjiVisibleChange = onEditKanjiVisibleChange
+                        onEditKanjiVisibleChange = onEditKanjiVisibleChange,
+                        onDetailWordVisibleChange = onDetailWordVisibleChange,
+                        onAddWordVisibleChange = onAddWordVisibleChange,
+                        onEditWordVisibleChange = onEditWordVisibleChange
                     )
                     Destination.Stats -> StatsScreen()
                 }
@@ -90,9 +96,14 @@ fun NavFun(modifier: Modifier = Modifier) {
     var isKanjiDetailVisible by rememberSaveable { mutableStateOf(false) }
     var isAddKanjiVisible by rememberSaveable { mutableStateOf(false)}
     var isEditKanjiVisible by rememberSaveable { mutableStateOf(false) }
+    var isDetailWordVisible by remember { mutableStateOf(false) }
+    var isAddWordVisible by remember { mutableStateOf(false) }
+    var isEditWordVisible by remember { mutableStateOf(false) }
 
     val bottomBarRoutes = remember { Destination.entries.map { it.route }.toSet() }
-    val showBottomBar = (currentRoute in bottomBarRoutes) && !(isKanjiDetailVisible || isAddKanjiVisible || isEditKanjiVisible)
+    val showBottomBar = (currentRoute in bottomBarRoutes) && !(isKanjiDetailVisible ||
+            isAddKanjiVisible || isEditKanjiVisible || isDetailWordVisible ||
+            isEditWordVisible || isAddWordVisible)
     //val showFloatingButton = currentRoute == Destination.Library.route && !isKanjiDetailVisible
 
 
@@ -163,6 +174,9 @@ fun NavFun(modifier: Modifier = Modifier) {
             onKanjiDetailVisibleChange = { isKanjiDetailVisible = it },
             onAddKanjiVisibleChange = {isAddKanjiVisible = it},
             onEditKanjiVisibleChange = { isEditKanjiVisible = it },
+            onDetailWordVisibleChange = { isDetailWordVisible = it},
+            onAddWordVisibleChange = { isAddWordVisible = it},
+            onEditWordVisibleChange = {isEditWordVisible = it},
             modifier = Modifier.padding(contentPadding)
         )
     }
