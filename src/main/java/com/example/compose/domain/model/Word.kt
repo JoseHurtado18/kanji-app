@@ -8,5 +8,9 @@ data class Word(
     val typeWord: TypeWord?,
     val sentence: String? = null,
     val notes: String? = null,
-    val isDueForReview: Boolean = false
-)
+    val isDueForReview: Boolean = false,
+    val readings: List<KanjiReadingAPI> = emptyList()
+) {
+    val lecturas: List<KanjiReadingAPI>
+        get() = readings
+}

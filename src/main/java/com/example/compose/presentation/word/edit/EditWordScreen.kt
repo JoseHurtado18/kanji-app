@@ -11,6 +11,7 @@ import androidx.compose.foundation.layout.fillMaxSize
 import androidx.compose.foundation.layout.fillMaxWidth
 import androidx.compose.foundation.layout.height
 import androidx.compose.foundation.layout.padding
+import androidx.compose.foundation.layout.size
 import androidx.compose.foundation.layout.width
 import androidx.compose.foundation.rememberScrollState
 import androidx.compose.foundation.selection.selectable
@@ -49,9 +50,12 @@ import com.example.compose.R
 import com.example.compose.domain.model.TypeWord
 
 import com.example.compose.presentation.kanji.add.FormLabel
+import com.example.compose.presentation.word.components.BtnBuscar
+import com.example.compose.presentation.word.components.CardReadings
 import com.example.compose.presentation.word.components.CardWordOutput
 import com.example.compose.presentation.word.components.OptionsTypeWord
 import com.example.compose.presentation.word.components.WordInputField
+import com.example.compose.presentation.word.components.WordKanjisComponent
 import com.example.compose.ui.theme.ComposeTheme
 import com.example.compose.ui.theme.NotoSans
 import com.example.compose.ui.theme.Roboto
@@ -104,12 +108,24 @@ fun EditWordContentForm(
     ) {
         CardWordOutput(word = state.kanjiWord, reading = state.reading)
 
-        WordInputField(
-            title = "Palabra",
-            value = state.kanjiWord,
-            onValueChange = viewModel::onKanjiWordChange,
-            placeholder = "Pega o escribe la palabra"
-        )
+        Row (
+            modifier = Modifier.fillMaxWidth(),
+            verticalAlignment = Alignment.Bottom, // el botón queda alineado con el TextField, no con la etiqueta
+            horizontalArrangement = Arrangement.spacedBy(8.dp)
+        ) {
+            WordInputField(
+                title = "Palabra",
+                value = state.kanjiWord,
+                onValueChange = viewModel::onKanjiWordChange,
+                placeholder = "Pega o escribe",
+                modifier = Modifier.weight(1f)
+            )
+
+            BtnBuscar(
+                onClick = viewModel::obtenerLecturasKanjisByWord,
+                modifier = Modifier.size(56.dp) // mismo alto que el TextField y cuadrado
+            )
+        }
 
         WordInputField(
             title = "Lectura",
@@ -123,6 +139,13 @@ fun EditWordContentForm(
             value = state.meaning,
             onValueChange = viewModel::onMeaningChange,
             placeholder = "Escribe el significado"
+        )
+
+        WordKanjisComponent(
+            lista = state.lecturas,
+            onAdd = viewModel::addLectura,
+            onValueChange = viewModel::onValueChange,
+            onRemove = viewModel::removeLecturaAt
         )
 
         OptionsTypeWord(

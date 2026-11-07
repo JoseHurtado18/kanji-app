@@ -2,6 +2,7 @@ package com.example.compose.presentation.library.components
 
 import androidx.compose.foundation.background
 import androidx.compose.foundation.border
+import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.Arrangement
 import androidx.compose.foundation.layout.Column
 import androidx.compose.foundation.layout.Row
@@ -52,6 +53,7 @@ val kanjisList = listOf(
 @Composable
 fun KanjisWordCard(
     list: List<Kanji> = emptyList(),
+    //onKanjiClick: (Kanji) -> Unit,
     modifier: Modifier = Modifier
 ) {
     Column(
@@ -65,7 +67,7 @@ fun KanjisWordCard(
             .padding(16.dp),
     ) {
         Text(
-            text = "Kanjis que la componen",
+            text = "Kanjis aprendidos que la componen",
             color = colorResource(R.color.grisclaro),
             fontFamily = Roboto,
             fontSize = 15.sp,
@@ -81,6 +83,7 @@ fun KanjisWordCard(
             ) {
                 ItemKanji(
                     item = list[0].toKanjiItem(),
+                    //onClick = { onKanjiClick(item) },
                     modifier = Modifier.weight(1f)
                 )
             }
@@ -120,12 +123,14 @@ fun KanjisWordCard(
 @Composable
 fun ItemKanji(
     item: KanjiItem,
+    //onClick: () -> Unit,
     modifier: Modifier = Modifier
 ) {
     Row(
         verticalAlignment = Alignment.CenterVertically,
         horizontalArrangement = Arrangement.spacedBy(10.dp),
         modifier = modifier
+            //.clickable(onClick = onClick)
             .height(56.dp)
             .border(
                 width = 1.dp,

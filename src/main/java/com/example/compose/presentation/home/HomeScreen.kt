@@ -117,7 +117,7 @@ fun Header(modifier: Modifier = Modifier){
     ) {
         Text(
             text = "Miercoles, 12 de agosto",
-            fontSize = 15.sp,
+            fontSize = 18.sp,
             color = Color.Black,
             fontWeight = FontWeight.SemiBold
         )

@@ -170,6 +170,10 @@ class AddWordViewModel @Inject constructor(
             return
         }
 
+        val validReadings = current.lecturas.filter {
+            it.kanji.isNotBlank() || it.reading.isNotBlank()
+        }
+
         val word = Word(
             kanjiWord = current.kanjiWord.trim(),
             reading = current.reading.trim(),
@@ -177,13 +181,14 @@ class AddWordViewModel @Inject constructor(
             typeWord = current.selectedTypeWord,
             sentence = current.sentence.ifBlank { null },
             notes = current.notes.ifBlank { null },
-            isDueForReview = originalIsDueForReview
+            isDueForReview = originalIsDueForReview,
+            readings = validReadings
         )
 
         viewModelScope.launch {
             try {
                 _uiState.update { it.copy(isLoading = true, errorMessage = null) }
-                wordUseCases.updateWordUseCase(word)
+                wordUseCases.addWordUseCase(word)
                 _uiState.update { it.copy(isLoading = false) }
                 _uiMessage.send(AddWordUiMessage.WordAdded("Palabra guardada exitosamente"))
             } catch (e: Exception) {

@@ -5,6 +5,7 @@ import com.example.compose.data.dao.ExampleWordDAO
 import com.example.compose.data.dao.KanjiDAO
 import com.example.compose.data.dao.WordDAO
 import com.example.compose.data.dao.WordLearningStateDao
+import com.example.compose.data.dao.WordReadingDAO
 import com.example.compose.data.repository.DictionaryRepositoryImpl
 import com.example.compose.data.repository.KanjiRepositoryImpl
 import com.example.compose.data.repository.KanjiStrokeRepositoryImpl
@@ -29,6 +30,7 @@ import com.example.compose.domain.usecase.word.AddWordUseCase
 import com.example.compose.domain.usecase.word.GetAllKanjisForWordUseCase
 import com.example.compose.domain.usecase.word.GetAllWordsUseCase
 import com.example.compose.domain.usecase.word.GetWordUseCase
+import com.example.compose.domain.usecase.word.ObserveReadingsForWordUseCase
 import com.example.compose.domain.usecase.word.UpdateWordUseCase
 import dagger.Binds
 import dagger.Module
@@ -63,9 +65,10 @@ object KanjiModule {
     @Singleton
     fun provideWordRepository(
         wordDao: WordDAO,
+        wordReadingDao: WordReadingDAO,
         learningStateDao: WordLearningStateDao
-    ):  WordRepository{
-        return WordRepositoryImpl(wordDao, learningStateDao)
+    ): WordRepository {
+        return WordRepositoryImpl(wordDao, wordReadingDao, learningStateDao)
     }
 
     @Provides
@@ -106,7 +109,8 @@ object KanjiModule {
             getAllWordsUseCase = GetAllWordsUseCase(repository),
             getWordUseCase = GetWordUseCase(repository),
             getAllKanjisForWordUseCase = GetAllKanjisForWordUseCase(repository),
-            updateWordUseCase = UpdateWordUseCase(repository)
+            updateWordUseCase = UpdateWordUseCase(repository),
+            observeReadingsForWordUseCase = ObserveReadingsForWordUseCase(repository)
         )
     }
 }

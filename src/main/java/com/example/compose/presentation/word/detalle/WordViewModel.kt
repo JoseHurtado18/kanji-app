@@ -3,6 +3,7 @@ package com.example.compose.presentation.word.detalle
 import androidx.lifecycle.ViewModel
 import androidx.lifecycle.viewModelScope
 import com.example.compose.domain.model.Kanji
+import com.example.compose.domain.model.KanjiReadingAPI
 import com.example.compose.domain.model.Word
 import com.example.compose.domain.usecase.WordUseCases
 
@@ -21,7 +22,8 @@ data class WordUiState(
     val selectedWord : Word? = null,
     val errorMessage: String? = null,
     val isLoading: Boolean? = false,
-    val kanjisWord: List<Kanji> = emptyList()
+    val kanjisWord: List<Kanji> = emptyList(),
+    val lecturas: List<KanjiReadingAPI> = emptyList()
 )
 
 sealed interface WordDetailUiMessage{
@@ -60,6 +62,7 @@ class WordViewModel @Inject constructor(
                         )
                     }
                     getKanjisWord(id)
+                    getReadingsForWord(id)
                 }
 
         }
@@ -78,6 +81,20 @@ class WordViewModel @Inject constructor(
                         kanjisWord = list,
                         isLoading = false
                     ) }
+                }
+        }
+    }
+
+    fun getReadingsForWord(id: Int){
+        viewModelScope.launch {
+            _uiState.update { it.copy(isLoading = true, errorMessage = null) }
+            wordUseCases.observeReadingsForWordUseCase(id)
+                .catch { e ->
+                    _uiState.update { it.copy(isLoading = false, errorMessage = e.localizedMessage ?: "Error al cargar los kanjis y sus lectura") }
+                    _uiMessage.send(WordDetailUiMessage.Info("Error al cargar los kanjis y sus lectura"))
+                }
+                .collect { list ->
+                    _uiState.update { it.copy(lecturas = list, isLoading = false)  }
                 }
         }
     }

@@ -29,7 +29,8 @@ fun AddBtn(
         ) {
             Icon(
                 imageVector = Icons.Filled.Add,
-                contentDescription = "Floating action button."
+                contentDescription = "Floating action button.",
+                tint = Color.Black
             )
         }
     }

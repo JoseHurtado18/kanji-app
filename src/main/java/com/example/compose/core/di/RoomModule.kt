@@ -10,10 +10,10 @@ import dagger.hilt.android.qualifiers.ApplicationContext
 import dagger.hilt.components.SingletonComponent
 import javax.inject.Singleton
 
-
 import androidx.room.migration.Migration
 import androidx.sqlite.db.SupportSQLiteDatabase
 import com.example.compose.data.dao.WordLearningStateDao
+import com.example.compose.data.dao.WordReadingDAO
 
 @Module
 @InstallIn(SingletonComponent::class)
@@ -97,11 +97,26 @@ object RoomModule {
         }
     }
 
+    val MIGRATION_3_4 = object : Migration(3, 4) {
+        override fun migrate(db: SupportSQLiteDatabase) {
+            db.execSQL("""
+                CREATE TABLE IF NOT EXISTS `word_reading_table` (
+                    `id` INTEGER PRIMARY KEY AUTOINCREMENT NOT NULL,
+                    `wordId` INTEGER NOT NULL,
+                    `kanji` TEXT NOT NULL,
+                    `reading` TEXT NOT NULL,
+                    FOREIGN KEY(`wordId`) REFERENCES `word_table`(`id`) ON UPDATE NO ACTION ON DELETE CASCADE
+                )
+            """.trimIndent())
+            db.execSQL("CREATE INDEX IF NOT EXISTS `index_word_reading_table_wordId` ON `word_reading_table` (`wordId`)")
+        }
+    }
+
     @Singleton
     @Provides
     fun provideRoom(@ApplicationContext context: Context) =
         Room.databaseBuilder(context, AppDatabase::class.java, DATABASE_NAME)
-            .addMigrations(MIGRATION_1_2, MIGRATION_2_3)
+            .addMigrations(MIGRATION_1_2, MIGRATION_2_3, MIGRATION_3_4)
             .fallbackToDestructiveMigration(dropAllTables = true)
             .build()
 
@@ -120,4 +135,8 @@ object RoomModule {
     @Singleton
     @Provides
     fun provideWordLearningStateDao(db: AppDatabase): WordLearningStateDao = db.getWordLearningStateDao()
+
+    @Singleton
+    @Provides
+    fun provideWordReadingDAO(db: AppDatabase): WordReadingDAO = db.getWordReadingDAO()
 }

@@ -1,6 +1,7 @@
 package com.example.compose.domain.repository
 
 import com.example.compose.domain.model.Kanji
+import com.example.compose.domain.model.KanjiReadingAPI
 import com.example.compose.domain.model.Word
 import kotlinx.coroutines.flow.Flow
 
@@ -16,4 +17,8 @@ interface WordRepository {
     suspend fun updateWord(word: Word)
 
     fun getAllKanjisForWord(id: Int): Flow<List<Kanji>>
+
+    suspend fun addReadingsForWord(wordId: Int, readings: List<KanjiReadingAPI>)
+
+    fun getReadingsForWord(wordId: Int): Flow<List<KanjiReadingAPI>>
 }

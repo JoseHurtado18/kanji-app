@@ -29,6 +29,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import com.example.compose.domain.model.TypeWord
 import com.example.compose.domain.model.Word
 import com.example.compose.presentation.kanji.components.CardNotas
+import com.example.compose.presentation.word.components.CardReadings
 
 val mockWord= Word(1, "学校", "がっこう", "escuela", TypeWord.SUSTANTIVO)
 @Composable
@@ -70,7 +71,8 @@ fun WordScreen(
         ) {
             CardWord(word.kanjiWord, word.reading, 3)
             MeanWordCard(word)
-            KanjisWordCard(modifier = modifier)
+            KanjisWordCard(state.kanjisWord, modifier = modifier)
+            CardReadings(kanjis = state.lecturas)
             CardNotas(word.notes ?: " ")
         }
     }

@@ -4,6 +4,7 @@ import com.example.compose.domain.usecase.word.AddWordUseCase
 import com.example.compose.domain.usecase.word.GetAllKanjisForWordUseCase
 import com.example.compose.domain.usecase.word.GetAllWordsUseCase
 import com.example.compose.domain.usecase.word.GetWordUseCase
+import com.example.compose.domain.usecase.word.ObserveReadingsForWordUseCase
 import com.example.compose.domain.usecase.word.UpdateWordUseCase
 
 data class WordUseCases (
@@ -11,5 +12,6 @@ data class WordUseCases (
     val getAllWordsUseCase: GetAllWordsUseCase,
     val getWordUseCase: GetWordUseCase,
     val getAllKanjisForWordUseCase: GetAllKanjisForWordUseCase,
-    val updateWordUseCase: UpdateWordUseCase
+    val updateWordUseCase: UpdateWordUseCase,
+    val observeReadingsForWordUseCase: ObserveReadingsForWordUseCase
 )
